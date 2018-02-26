@@ -106,3 +106,8 @@ buildNumber.properties
 
 
 # End of https://www.gitignore.io/api/java,maven,intellij
+.idea/
+.project
+.classpath
+.mvn/
+.settings/
