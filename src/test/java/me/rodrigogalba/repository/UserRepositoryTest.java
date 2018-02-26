@@ -21,7 +21,11 @@ public class UserRepositoryTest {
 
     @Test
     public void createValidUser() {
-        User user = new User("Username", "user_login", "user@email.com", "plain_password");
+        User user = new User();
+        user.setName("Username");
+        user.setLogin("user_login");
+        user.setEmail("user@email.com");
+        user.setPassword("plain_password");
         repository.save(user);
 
         assertNotNull(user.getId());
@@ -31,94 +35,107 @@ public class UserRepositoryTest {
         assertEquals("plain_password", user.getEncryptedPassword());
         assertFalse(user.isAdmin());
         assertNotNull(user.getCreatedDate());
-        assertNull(user.getUpdatedDate());
+        assertNotNull(user.getUpdatedDate());
     }
 
     @Test
     public void validatesNullName() {
         try {
-            User user = new User(null, "senna", "senna@email.com", "plain_password");
+            User user = new User();
+            user.setLogin("user_login");
+            user.setEmail("user@email.com");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates null name");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("não pode ser nulo"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesEmptyName() {
         try {
-            User user = new User("", "senna", "senna@email.com", "plain_password");
+            User user = new User();
+            user.setName("");
+            user.setLogin("user_login");
+            user.setEmail("user@email.com");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates empty name");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar vazio"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesNullLogin() {
         try {
-            User user = new User("name", null, "senna@email.com", "plain_password");
+            User user = new User();
+            user.setName("Username");
+            user.setEmail("user@email.com");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates null login");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("não pode ser nulo"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesEmptyLogin() {
         try {
-            User user = new User("name", "", "senna@email.com", "plain_password");
+            User user = new User();
+            user.setName("Username");
+            user.setLogin("");
+            user.setEmail("user@email.com");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates empty login");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar vazio"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesNullEmail() {
         try {
-            User user = new User("name", "login", null, "plain_password");
+            User user = new User();
+            user.setName("Username");
+            user.setLogin("user_login");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates null email");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("não pode ser nulo"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesEmptyEmail() {
         try {
-            User user = new User("name", "login", "", "plain_password");
+            User user = new User();
+            user.setName("Username");
+            user.setLogin("user_login");
+            user.setEmail("");
+            user.setPassword("plain_password");
             repository.save(user);
             fail("should validates empty email");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar vazio"));
+            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
         }
     }
 
     @Test
     public void validatesNullPassword() {
         try {
-            User user = new User("name", "login", "", null);
+            User user = new User();
+            user.setName("Username");
+            user.setLogin("user_login");
+            user.setEmail("user@email.com");
             repository.save(user);
             fail("should validates null password");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("não pode ser nulo"));
-        }
-    }
-
-    @Test
-    public void validatesEmptyPassword() {
-        try {
-            User user = new User("name", "login", "email", "");
-            repository.save(user);
-            fail("should validates empty password");
-        } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar vazio"));
+            assertThat(ex.getLocalizedMessage(), containsString("could not execute statement"));
         }
     }
 }

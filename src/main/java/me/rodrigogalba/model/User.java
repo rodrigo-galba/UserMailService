@@ -1,60 +1,64 @@
 package me.rodrigogalba.model;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
+
+import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Entity
 @Table(name = "users")
-public class User {
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties(value = {"createdDate", "updatedDate"}, allowGetters = true)
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String name;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @Column(unique = true)
+    @Length(min = 3)
     private String login;
 
-    @NotNull
-    @NotEmpty
+    @Column(nullable = false)
     private String password;
 
-    @NotNull
-    @NotEmpty
+    @NotBlank
+    @Email
+    @Column(unique = true)
     private String email;
 
     @NotNull
     private Boolean isAdmin = false;
 
-    @NotNull
-    private Date createdDate = new Date();
+    @CreatedDate
+    @Temporal(TIMESTAMP)
+    @Column(nullable = false, updatable = false)
+    protected Date createdDate;
 
-    private Date updatedDate;
+    @Column(nullable = false)
+    @LastModifiedDate
+    @Temporal(TIMESTAMP)
+    protected Date updatedDate;
 
     public User() {}
 
-    public User(String name, String login, String email, String password) {
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.password = password;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public Date getUpdatedDate() {
-        return updatedDate;
-    }
-
+    @JsonIgnore
     public Boolean isAdmin() {
         return isAdmin;
     }
@@ -71,6 +75,7 @@ public class User {
         return login;
     }
 
+    @JsonIgnore
     public String getEncryptedPassword() {
         return password;
     }
@@ -83,10 +88,37 @@ public class User {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return String.format(
-                "User[id=%d, name='%s', login='%s', password='%s', email='%s', isAdmin='%s', createdDate='%s', updatedDate='%s']",
-                id, name, login, password, email, isAdmin, createdDate, updatedDate);
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public Date getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public void setUpdatedDate(Date updatedDate) {
+        this.updatedDate = updatedDate;
+    }
+
+    public void merge(User userDetails) {
+        this.name = userDetails.name;
+        this.login = userDetails.login;
+        this.email = userDetails.email;
     }
 }
