@@ -1,5 +1,7 @@
 package me.rodrigogalba.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -13,15 +15,19 @@ public class User {
     private Long id;
 
     @NotNull
+    @NotEmpty
     private String name;
 
     @NotNull
+    @NotEmpty
     private String login;
 
     @NotNull
+    @NotEmpty
     private String password;
 
     @NotNull
+    @NotEmpty
     private String email;
 
     @NotNull
