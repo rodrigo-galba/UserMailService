@@ -32,5 +32,10 @@ To gracefully shutdown application:
 ctrl+c
 ```
 
+To perform tests:
+```
+mvn test
+```
+
 [Spring boot]: https://projects.spring.io/spring-boot/
 [Maven]: https://maven.apache.org/
