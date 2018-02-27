@@ -1,5 +1,6 @@
 package me.rodrigogalba.service;
 
+import me.rodrigogalba.messaging.MessagingConfig;
 import me.rodrigogalba.messaging.UserMailMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,8 @@ public class UserMailService {
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
-    public void sendMessage() {
-        final UserMailMessage message = new UserMailMessage("Hello there!");
+    public void sendMessage(UserMailMessage message) {
         log.info("Sending message...");
-        rabbitTemplate.convertAndSend("", "mail.message.queue", message);
+        rabbitTemplate.convertAndSend("", MessagingConfig.MAIL_MESSAGE_QUEUE, message);
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class MessagingConfig {
 
+    public static final String MAIL_MESSAGE_QUEUE = "mail.message.queue";
+
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
         return new Jackson2JsonMessageConverter();
