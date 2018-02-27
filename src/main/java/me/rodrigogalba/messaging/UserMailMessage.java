@@ -6,6 +6,7 @@ import java.util.List;
 
 public class UserMailMessage {
 
+    @NotBlank
     private String recipient;
     private List<String> bccRecipients;
     private String sender;

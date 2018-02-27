@@ -74,8 +74,7 @@ public class UserController {
         recipients.add("admin_1@email.com");
         recipients.add("admin_2@email.com");
         message.setBccRecipients(recipients);
-        message.setRecipient("current_user@email.com");
-        message.setSender("noreply@userapp.com");
+        message.setSender("current_user@email.com");
 
         mailService.sendMessage(message);
         return ResponseEntity.ok().build();
