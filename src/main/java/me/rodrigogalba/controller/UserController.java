@@ -79,14 +79,4 @@ public class UserController {
         mailService.sendMessage(message);
         return ResponseEntity.ok().build();
     }
-
-    @PostMapping(value = "/login")
-    public ResponseEntity<User> login() {
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping(value = "/logout")
-    public ResponseEntity<User> logout() {
-        return ResponseEntity.ok().build();
-    }
 }
