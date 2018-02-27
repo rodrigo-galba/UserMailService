@@ -2,6 +2,7 @@ package me.rodrigogalba.controller;
 
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
+import me.rodrigogalba.service.UserMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class UserController {
 
     @Autowired
     UserRepository repository;
+
+    @Autowired
+    UserMailService mailService;
 
     @GetMapping("/")
     public List<User> index() {
@@ -59,5 +63,11 @@ public class UserController {
         user.merge(userDetails);
         repository.save(user);
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping(value = "/email")
+    public ResponseEntity<User> sendEmail() {
+        mailService.sendMessage();
+        return ResponseEntity.ok().build();
     }
 }
