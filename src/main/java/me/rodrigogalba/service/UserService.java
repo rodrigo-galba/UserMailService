@@ -73,12 +73,13 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void updatePermission(Long userId, Boolean admin) {
+    public User updatePermission(Long userId, Boolean admin) {
         User user = repository.findById(userId);
         if (user == null) {
             throw new RuntimeException("Invalid user.");
         }
         user.setAdmin(admin);
         repository.save(user);
+        return user;
     }
 }
