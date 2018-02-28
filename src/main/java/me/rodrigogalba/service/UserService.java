@@ -56,7 +56,7 @@ public class UserService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void updateUserPassword(String newPassword, Long userId) {
+    public User updateUserPassword(String newPassword, Long userId) {
         User user = repository.findById(userId);
         if (user == null) {
             throw new RuntimeException("Invalid user.");
@@ -70,6 +70,7 @@ public class UserService {
 
         user.setPassword(encryptedPassword);
         repository.save(user);
+        return user;
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

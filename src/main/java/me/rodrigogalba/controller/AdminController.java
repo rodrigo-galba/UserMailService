@@ -25,8 +25,12 @@ public class AdminController {
     UserService userService;
 
     @PatchMapping(value = "/password/")
-    public ResponseEntity<User> changePassword(@RequestBody User userDetails) {
-        userService.updateUserPassword(userDetails.getEncryptedPassword(), userDetails.getId());
+    public ResponseEntity<User> changePassword(@RequestBody User userDetails,
+                                               Principal principal,
+                                               HttpServletRequest request,
+                                               HttpServletResponse response) {
+        User user = userService.updateUserPassword(userDetails.getEncryptedPassword(), userDetails.getId());
+        logoutForCurrentUser(principal, request, response, user);
         return ResponseEntity.ok().build();
     }
 
@@ -37,13 +41,17 @@ public class AdminController {
                                                  HttpServletResponse response) {
         User user = userService.updatePermission(adminPermission.getUserId(), adminPermission.isAdmin());
 
+        logoutForCurrentUser(principal, request, response, user);
+
+        return ResponseEntity.ok().build();
+    }
+
+    private void logoutForCurrentUser(Principal principal, HttpServletRequest request, HttpServletResponse response, User user) {
         if (principal.getName().equals(user.getEmail())) {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             if (auth != null){
                 new SecurityContextLogoutHandler().logout(request, response, auth);
             }
         }
-
-        return ResponseEntity.ok().build();
     }
 }
