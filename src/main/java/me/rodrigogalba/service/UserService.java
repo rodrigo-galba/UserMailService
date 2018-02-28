@@ -5,19 +5,14 @@ import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserService {
@@ -50,7 +45,7 @@ public class UserService {
     }
 
     public void sendMail(String sender, UserMailMessage message) {
-        List<User> admins = repository.findByIsAdmin(true);
+        List<User> admins = repository.findByAdmin(true);
         List<String> recipients = admins.stream()
                 .map(u -> u.getEmail())
                 .collect(Collectors.toList());
@@ -74,6 +69,16 @@ public class UserService {
         }
 
         user.setPassword(encryptedPassword);
+        repository.save(user);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void updatePermission(Long userId, Boolean admin) {
+        User user = repository.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("Invalid user.");
+        }
+        user.setAdmin(admin);
         repository.save(user);
     }
 }

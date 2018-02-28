@@ -2,6 +2,7 @@ package me.rodrigogalba.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -48,7 +49,7 @@ public class User implements Serializable {
     private String email;
 
     @NotNull
-    private Boolean isAdmin = false;
+    private boolean admin;
 
     @CreatedDate
     @Temporal(TIMESTAMP)
@@ -60,11 +61,9 @@ public class User implements Serializable {
     @Temporal(TIMESTAMP)
     protected Date updatedDate;
 
-    public User() {}
-
     @JsonIgnore
     public Boolean isAdmin() {
-        return isAdmin;
+        return admin;
     }
 
     public Long getId() {
@@ -124,5 +123,9 @@ public class User implements Serializable {
         this.name = userDetails.name;
         this.login = userDetails.login;
         this.email = userDetails.email;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }

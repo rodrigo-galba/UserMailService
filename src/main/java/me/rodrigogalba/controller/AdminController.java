@@ -1,5 +1,6 @@
 package me.rodrigogalba.controller;
 
+import me.rodrigogalba.controller.template.AdminPermission;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.service.UserService;
@@ -23,10 +24,9 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping(value = "/permission/{userId}")
-    public ResponseEntity<User> changePermission(@PathVariable Long userId,
-                                                 @RequestBody User userDetails) {
-        //TODO: To implement user permission update only by admins
+    @PatchMapping(value = "/permission/")
+    public ResponseEntity<User> changePermission(@Valid @RequestBody AdminPermission adminPermission) {
+        userService.updatePermission(adminPermission.getUserId(), adminPermission.isAdmin());
         return ResponseEntity.ok().build();
     }
 }
