@@ -54,4 +54,25 @@ public class UserService {
 
         mailService.sendMessage(message);
     }
+
+    public void updateUserPassword(String currentUserEmail, String newPassword, Long userId) {
+        User admin = repository.findByEmail(currentUserEmail);
+        if (admin == null || !admin.isAdmin()) {
+            throw new RuntimeException("Permission denied for this operation.");
+        }
+
+        User user = repository.findById(userId);
+        if (user == null) {
+            throw new RuntimeException("Invalid user.");
+        }
+        //TODO: encrypt password before save in database
+        String encryptedPassword = newPassword;
+
+        if (encryptedPassword == null || encryptedPassword.trim().isEmpty()) {
+            throw new RuntimeException("Invalid password.");
+        }
+
+        user.setPassword(encryptedPassword);
+        repository.save(user);
+    }
 }
