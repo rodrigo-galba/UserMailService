@@ -1,5 +1,6 @@
 package me.rodrigogalba.service;
 
+import me.rodrigogalba.messaging.UserMailMessage;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.security.Roles;
@@ -10,12 +11,17 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    UserMailService mailService;
 
     public User authenticate(String login, String encryptedPassword) {
         User user = repository.findByLogin(login);
@@ -36,5 +42,16 @@ public class UserService {
         }
 
         return roles;
+    }
+
+    public void sendMail(String sender, UserMailMessage message) {
+        List<User> admins = repository.findByIsAdmin(true);
+        List<String> recipients = admins.stream()
+                .map(u -> u.getEmail())
+                .collect(Collectors.toList());
+        message.setBccRecipients(recipients);
+        message.setSender(sender);
+
+        mailService.sendMessage(message);
     }
 }

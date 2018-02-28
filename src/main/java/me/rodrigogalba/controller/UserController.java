@@ -4,6 +4,7 @@ import me.rodrigogalba.messaging.UserMailMessage;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.service.UserMailService;
+import me.rodrigogalba.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class UserController {
     UserRepository repository;
 
     @Autowired
-    UserMailService mailService;
+    UserService userService;
 
     @GetMapping("/")
     public List<User> index() {
@@ -68,15 +70,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/email")
-    public ResponseEntity<User> sendEmail(@Valid @RequestBody UserMailMessage message) {
-        //TODO: Refactor to get admin list and current user from session
-        List<String> recipients = new ArrayList<String>();
-        recipients.add("admin_1@email.com");
-        recipients.add("admin_2@email.com");
-        message.setBccRecipients(recipients);
-        message.setSender("current_user@email.com");
-
-        mailService.sendMessage(message);
+    public ResponseEntity<User> sendEmail(@Valid @RequestBody UserMailMessage message,
+                                          Principal principal) {
+        String currentUser = principal.getName();
+        userService.sendMail(currentUser, message);
         return ResponseEntity.ok().build();
     }
 }
