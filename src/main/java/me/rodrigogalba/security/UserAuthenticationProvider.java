@@ -26,7 +26,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
 
         User user = service.authenticate(login, encryptedPassword);
         if (user != null) {
-            Collection<? extends GrantedAuthority> authorities = service.getRoles(user);
+            Collection<? extends GrantedAuthority> authorities = service.getAuthorities(user);
             return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getEncryptedPassword(), authorities);
         } else {
             return null;

@@ -72,8 +72,7 @@ public class UserController {
     @PostMapping(value = "/email")
     public ResponseEntity<User> sendEmail(@Valid @RequestBody UserMailMessage message,
                                           Principal principal) {
-        String currentUser = principal.getName();
-        userService.sendMail(currentUser, message);
+        userService.sendMail(principal.getName(), message);
         return ResponseEntity.ok().build();
     }
 }

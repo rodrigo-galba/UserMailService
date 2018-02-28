@@ -5,9 +5,12 @@ import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -35,7 +38,7 @@ public class UserService {
         }
     }
 
-    public Collection<? extends GrantedAuthority> getRoles(User user) {
+    public Collection<? extends GrantedAuthority> getAuthorities(User user) {
         List<GrantedAuthority> roles = new ArrayList();
         roles.add(() -> { return Roles.USER.name(); });
 
