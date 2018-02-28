@@ -1,0 +1,9 @@
+[submodule "services/config-server"]
+	path = services/config-server
+	url = https://bitbucket.org/rgalba/java-spring-config-server
+[submodule "services/mail-service"]
+	path = services/mail-service
+	url = https://bitbucket.org/rgalba/mailapp
+[submodule "services/config-properties"]
+	path = services/config-properties
+	url = https://bitbucket.org/rgalba/java-spring-properties
