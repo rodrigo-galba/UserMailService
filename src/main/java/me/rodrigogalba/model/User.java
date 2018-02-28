@@ -3,6 +3,7 @@ package me.rodrigogalba.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import me.rodrigogalba.model.listener.UserEntityListener;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -24,7 +25,7 @@ import static javax.persistence.TemporalType.TIMESTAMP;
 
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class, UserEntityListener.class})
 @JsonIgnoreProperties(value = {"createdDate", "updatedDate"}, allowGetters = true)
 public class User implements Serializable {
 
