@@ -9,7 +9,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByLogin(String login);
 
-    List<User> findByIsAdmin(Boolean isAdmin);
+    List<User> findByAdmin(Boolean isAdmin);
 
     User findByEmail(String email);
 

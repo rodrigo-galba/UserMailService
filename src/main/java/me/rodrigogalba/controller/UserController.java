@@ -33,7 +33,7 @@ public class UserController {
         return (List<User>) repository.findAll();
     }
 
-    @PostMapping(value = "/")
+    @PostMapping(value = "/create")
     public User save(@Valid @RequestBody User user) {
         return repository.save(user);
     }
