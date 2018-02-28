@@ -18,10 +18,8 @@ public class AdminController {
     UserService userService;
 
     @PatchMapping(value = "/password/")
-    public ResponseEntity<User> changePassword(@RequestBody User userDetails,
-                                               Principal principal) {
-        String currentUserEmail = principal.getName();
-        userService.updateUserPassword(currentUserEmail, userDetails.getEncryptedPassword(), userDetails.getId());
+    public ResponseEntity<User> changePassword(@RequestBody User userDetails) {
+        userService.updateUserPassword(userDetails.getEncryptedPassword(), userDetails.getId());
         return ResponseEntity.ok().build();
     }
 

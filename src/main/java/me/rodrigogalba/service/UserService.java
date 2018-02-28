@@ -5,6 +5,8 @@ import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.security.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -55,12 +57,8 @@ public class UserService {
         mailService.sendMessage(message);
     }
 
-    public void updateUserPassword(String currentUserEmail, String newPassword, Long userId) {
-        User admin = repository.findByEmail(currentUserEmail);
-        if (admin == null || !admin.isAdmin()) {
-            throw new RuntimeException("Permission denied for this operation.");
-        }
-
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public void updateUserPassword(String newPassword, Long userId) {
         User user = repository.findById(userId);
         if (user == null) {
             throw new RuntimeException("Invalid user.");
