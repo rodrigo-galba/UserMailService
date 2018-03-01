@@ -1,0 +1,60 @@
+---
+- name: Add Postgres Repo
+  become: yes
+  apt_repository: repo='deb https://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' state=present
+
+- name: add postgres trusted key
+  become: yes
+  apt_key: url=https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+
+- name: Install Postgresql 9.5
+  apt: pkg={{ item }} state=latest
+  become: yes
+  force: yes
+  with_items:
+    - postgresql-common
+    - postgresql-9.5
+    - python-psycopg2
+    - libpq-dev
+    - ptop
+
+- name: Starts Postgres if not running
+  become: yes
+  service:
+    name: postgresql
+    state: started
+
+- name: Create database application
+  become: yes
+  become_user: postgres
+  shell: psql -c 'create database {{ app_database_name }};'
+  ignore_errors: yes
+
+- name: Create user application
+  become: yes
+  become_user: postgres
+  shell: psql -c "create user {{ db_user }} with password '{{ root_db_password }}';"
+  ignore_errors: yes
+
+- name: Grant database permissions
+  become: yes
+  become_user: postgres
+  shell: psql -c 'grant all privileges on database {{ app_database_name }} to {{ db_user }};'
+  ignore_errors: yes
+
+############################################################
+#### Postgresql remote acces for development mode
+# $ sudo vim /etc/postgresql/9.5/main/postgresql.conf
+## listen_addresses = '*'
+
+# $ sudo vim /etc/postgresql/9.5/main/pg_hba.conf
+## host     all             all             all           md5
+
+# $psql -U vagrant -d postgres
+## \password
+## type db_user_name
+## type the new password
+## type the new password again
+## type \q
+# $ sudo service postgresql restart
+############################################################

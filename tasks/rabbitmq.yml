@@ -1,0 +1,56 @@
+# Based on https://github.com/ansible/ansible-examples/blob/master/language_features/rabbitmq.yml
+# and https://www.digitalocean.com/community/tutorials/how-to-install-and-manage-rabbitmq
+---
+  - name: ensure python-software-properties is installed
+    become: yes
+    apt: pkg=python-software-properties state=installed
+
+  - name: ensure pip dependencies are installed
+    become: yes
+    pip:
+      name: requests
+
+  - name: add rabbitmq official apt repository
+    become: yes
+    apt_repository:
+      repo: 'deb http://www.rabbitmq.com/debian/ testing main'
+      state: present
+
+  - name: add trusted key
+    become: yes
+    apt_key:
+      url: http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+      state: present
+
+  - name: install rabbitmq packages
+    become: yes
+    apt: name={{ item }} update_cache=yes state=latest force=yes
+    with_items:
+    - rabbitmq-server
+
+  - name: enable rabbitmq plugins
+    become: yes
+    rabbitmq_plugin: names=rabbitmq_management,rabbitmq_tracing,rabbitmq_federation state=enabled
+
+  - name: restart rabbitmq
+    become: yes
+    service:
+      name: rabbitmq-server
+      state: restarted
+
+  - name: add users
+    become: yes
+    rabbitmq_user: user={{item}} password={{ rabbitmq_password }} tags=administrator,{{item}} vhost=/ configure_priv=.* write_priv=.* read_priv=.* state=present
+    with_items:
+    - '{{ rabbitmq_username }}'
+
+  - name: remove default guest user
+    become: yes
+    rabbitmq_user: user=guest state=absent
+
+  - name: creates mail message queue
+    become: yes
+    rabbitmq_queue:
+      name: "{{ mail_message_queue }}"
+      login_user: "{{ rabbitmq_username }}"
+      login_password: "{{ rabbitmq_password }}"

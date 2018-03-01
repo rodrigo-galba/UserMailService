@@ -1,0 +1,40 @@
+---
+- hosts: all
+  vars:
+    ruby_version: ruby-2.3.4
+    db_user: ubuntu
+    app_database_name: user_app
+    root_db_password: password
+    project_user: ubuntu
+    project_root: "/home/ubuntu/project"
+    project_path: "{{ project_root }}"
+    host_user: ubuntu
+    user_home_path: "/home/{{ host_user }}"
+    rvm_path: "/home/{{ host_user }}/.rvm/gems/{{ ruby_version }}/bin:/home/{{ host_user }}/.rvm/gems/{{ ruby_version }}@global/bin:/home/{{ host_user }}/.rvm/rubies/{{ ruby_version }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/home/{{ host_user }}/.rvm/bin:/home/{{ host_user }}/.rvm/bin"
+    gem_path: "/home/{{ host_user }}/.rvm/gems/{{ ruby_version }}:/home/{{ host_user }}/.rvm/gems/{{ ruby_version }}@global"
+    redis_port: 6379
+    redis_password: secret
+    rabbitmq_username: user2
+    rabbitmq_password: secret
+    mail_message_queue: mail.message.queue
+    sdkman_script_install_url: http://get.sdkman.io
+    sdkman_folder: "{{ user_home_path }}/.sdkman"
+  tasks:
+    - name: make sure the system encoding is utf-8
+      become: yes
+      template:
+        src: templates/locale
+        dest: /etc/default/locale
+        owner: root
+        group: root
+        mode: 0644
+
+    - include: tasks/apt.yml
+    - include: tasks/oh-my-zshell.yml
+    - include: tasks/ruby.yml
+    - include: tasks/mailcatcher.yml
+    - include: tasks/java.yml
+    - include: tasks/postgresql.yml
+    - include: tasks/redis.yml
+    - include: tasks/rabbitmq.yml
+    - include: tasks/finetune.yml

@@ -1,0 +1,106 @@
+# Forked from https://github.com/jprichardson/ansible-redis
+# and https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+---
+  - name: update apt to install redis
+    apt: update_cache=yes
+    become: yes
+
+
+  - name: ensure packages installed used by redis
+    apt: pkg={{ item }} state=latest
+    become: yes
+    with_items:
+      - make
+      - build-essential
+      - tcl
+
+  - name: download latest stable redis
+    become: yes
+    get_url: url=http://download.redis.io/redis-stable.tar.gz dest=/tmp/redis-stable.tar.gz
+
+  - name: untar redis
+    become: yes
+    command: tar zxf /tmp/redis-stable.tar.gz -C /tmp
+
+  - name: build redis
+    become: yes
+    command: make -C /tmp/redis-stable
+
+  - name: create redis group
+    become: yes
+    group: name=redis state=present system=yes
+
+  - name: create redis user
+    become: yes
+    user: name=redis group=redis createhome=no shell=/bin/false system=yes state=present
+
+  - name: make sure that /etc/redis exists
+    become: yes
+    file: path=/etc/redis state=directory mode=0755
+
+  - name: make sure that /var/db/redis exists
+    become: yes
+    file: path=/var/db/redis state=directory mode=0755 group=redis owner=redis
+
+  - name: make sure redis.log file exists
+    become: yes
+    template:
+        src: templates/redis/redis.log
+        dest: /var/log/redis.log
+        owner: redis
+        group: redis
+        mode: 0644
+
+  - name: copy upstart file
+    become: yes
+    template:
+      src: templates/redis/redis.service
+      dest: /etc/systemd/system/redis.service
+
+  - name: copy redis.conf file
+    become: yes
+    template:
+      src: templates/redis/redis.conf
+      dest: /etc/redis/redis.conf
+      group: redis
+      owner: redis
+
+  - name: copy custom template
+    become: yes
+    template:
+      src: templates/redis/redis.local.conf.j2
+      dest: /etc/redis/redis.local.conf
+      group: redis
+      owner: redis
+
+  - name: copy redis-local script
+    become: yes
+    template:
+      src: templates/redis/redis-local.j2
+      dest: /usr/local/bin/redis-local
+      mode: 0755
+
+  - name: installing redis binaries
+    become: yes
+    command: cp /tmp/redis-stable/src/{{ item }} /usr/local/bin
+    with_items:
+      - redis-server
+      - redis-cli
+      - redis-check-aof
+
+  - name: cleaning up build files
+    become: yes
+    command: rm -rf /tmp/{{ item }}
+    with_items:
+      - redis-stable
+      - redis-stable.tar.gz
+
+  - name: ensure redis service is restarted
+    become: yes
+    service:
+      name: redis
+      state: restarted
+
+  - name: enable Redis to Start at startup
+    become: yes
+    command: systemctl enable redis

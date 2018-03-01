@@ -1,0 +1,19 @@
+---
+- name: install zsh
+  apt: pkg={{ item }} state=latest
+  become: yes
+  with_items:
+    - zsh
+
+- name: clone oh-my-zsh
+  git: repo=https://github.com/robbyrussell/oh-my-zsh.git dest=~/.oh-my-zsh
+
+- name: cp oh-my-zsh
+  shell: cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+
+- name: set default shell to zsh
+  become: yes
+  user:
+    name: "{{ host_user }}"
+    shell: /bin/zsh

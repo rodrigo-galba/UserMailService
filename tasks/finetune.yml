@@ -1,0 +1,3 @@
+---
+- name: start at Projects folder
+  shell: echo 'cd {{ project_root }}' >> ~/.zshrc

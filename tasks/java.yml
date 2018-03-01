@@ -1,0 +1,29 @@
+---
+- name: Install Java base packages
+  apt: pkg={{ item }} state=latest
+  become: yes
+  with_items:
+    - openjdk-8-jdk
+    - zip
+    - maven
+
+- name: check if sdkman is installed
+  shell: test -d {{ sdkman_folder }} && echo "yes" || echo "no"
+  register: is_sdkman_installed
+
+- name: Install SDKMAN!
+  when: is_sdkman_installed.stdout == "no"
+  shell: curl -s {{sdkman_script_install_url}} | bash executable=/bin/zsh
+  become: no
+
+- name: add sdkman in .zshrc
+  lineinfile: dest={{user_home_path}}/.zshrc regexp="\/.sdkman/bin\/sdkman\-init\.sh" line='[[ -s "{{sdkman_folder}}/bin/sdkman-init.sh" ]] && source "{{sdkman_folder}}/bin/sdkman-init.sh"'
+  become: no
+
+- name: Installing springboot
+  become: no
+  # This will read your bash profile file, which would setup sdkman-init.sh.
+  shell: source {{sdkman_folder}}/bin/sdkman-init.sh && sdk install springboot 1.5.10.RELEASE
+  args:
+    chdir: "{{ user_home_path }}"
+    executable: /bin/zsh
