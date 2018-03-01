@@ -27,6 +27,11 @@ All projects are based on Spring Boot. Since projects have distinct lifecycles, 
 
 They are available in the [/services] directory.
 
+Clone current repo including all submodules:
+```
+git clone --recurse-submodules -j3 https://itbucket.org/rgalba/challenge-java-spring-cloud.git
+```
+
 ## Technology stack
 Main tools used in this project:
 
