@@ -1,7 +1,7 @@
 # User API
 
 - Creates a user (login not required)
-```json
+```sh
 curl --request POST \
   --url http://localhost:8080/users/create \
   --header 'content-type: application/json' \
@@ -14,18 +14,20 @@ curl --request POST \
 ```
 
 - Get all users
-```json
-curl --url http://localhost:8080/users/
+```sh
+curl --url http://localhost:8080/users/ \
+  --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961'
 ```
 
 - Updates user details by ID:
 
 Example:
 > user_id: 19
-```json
+```sh
 curl --request PATCH \
   --url http://localhost:8080/users/19 \
   --header 'content-type: application/json' \
+  --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961' \
   --data '{
 		"name": "User 19",
 		"login": "user19",
@@ -36,27 +38,29 @@ curl --request PATCH \
 - Deletes user by ID
 Example:
 > user_id: 19
-```json
+```sh
 curl --request DELETE \
-  --url http://localhost:8080/users/19
+  --url http://localhost:8080/users/19 \
+  --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961'
 ```
 
 - Find user by ID
 Example:
 > user_id: 19
-```json
-curl --url http://localhost:8080/users/19
+```sh
+curl --url http://localhost:8080/users/19 \
+  --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961'
 ```
 
 - Performs login
-```json
+```sh
 curl --request POST \
   --url http://localhost:8080/login \
-  --header 'authorization: Basic amFuZWRvZTp1bHRyYS1zZWNyZXQ='
+  --user johndoe:s3cr3t
 ```
 
 - Performs logout
-```json
+```sh
 curl --request POST \
   --url http://localhost:8080/logout \
   --header 'content-type: application/json' \
@@ -65,7 +69,7 @@ curl --request POST \
 
 - Sends an email
 
-```json
+```sh
 curl --request POST \
   --url http://localhost:8080/users/email \
   --header 'content-type: application/json' \
@@ -79,7 +83,7 @@ curl --request POST \
 
 - Change user password (only by admins)
 __If the user updates himself, his session will be terminated.__
-```json
+```sh
 curl --request PATCH \
   --url http://localhost:8080/admin/password/ \
   --header 'content-type: application/json' \
@@ -92,7 +96,7 @@ curl --request PATCH \
 
 - Change user permission (only by admins)
 __If the user updates himself, his session will be terminated.__
-```json
+```sh
 curl --request PATCH \
  --url http://localhost:8080/admin/permission/ \
  --header 'content-type: application/json' \

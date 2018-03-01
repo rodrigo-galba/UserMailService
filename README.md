@@ -25,31 +25,47 @@ The project consists of three micro services:
 
 All projects are based on Spring Boot. Since projects have distinct lifecycles, they must have different repositories. But for the sake of simplicity, the other projects were added as modules to the main repository.
 
-They are available in the `services` directory.
+They are available in the [/services] directory.
 
+## Technology stack
+Main tools used in this project:
+
+- [Java] 8: General-purpose computer-programming language.
+- [Spring Boot]: Makes it easy to create stand-alone, production-grade Spring based Applications.
+- [Maven]: Project management and comprehension tool.
+- [Ansible]: Automation for everyone.
+- [Vagrant]: Development Environments Made Easy
+
+---
+
+## Micro services explained
 #### User service
 
-It is basically an API for user control, with authentication and authorization handling, as well as providing email sending and password + permission change (for admins).
+It is basically an API to manage users, with authentication and authorization handling, as well as providing email sending and password + permission change (for admins).
 
-For more details and documentation, go to [USER API GUIDE].
+For more details and documentation, see the [USER API GUIDE].
 
 #### Mail Service
 
 It is a micro service that consumes template messages and transforms into e-mail messages.
+For details, check its [Mail Service] repository.
 
 #### Configuration Service
 
 It is a micro service that manages configurations of several clients, based on a main GIT repository. In addition it performs the control by environment profile, as well as access control.
+
+For details, check its [Configuration Service] repository.
 
 ---
 
 ## Provisioning
 
 Infrastructure provisioning has been implemented with Ansible and Vagrant in instances based on VirtualBox.
+There is no needs to install Ansible because it will be installed automatically by Vagrant, directly on the guest instance.
 
 Install both:
 
-- [Vagrant] 2+
+- [Vagrant] (version 2+ strictly necessary)
 - [VirtualBox] 5+
 
 To perform provisioning, access the project directory and run:
@@ -95,6 +111,9 @@ java -jar target/userapp-0.0.1-SNAPSHOT.jar &
 ## Usage
 
 After provisioning and constructing the projects, they should already be available for use.
+There is an admin account with credentials:
+> login: `admin`
+> password: `s3cr3t`
 
 ### Scenario: Sending an email
 #### Step 1 - Create regular user
@@ -164,3 +183,6 @@ To check the email box, access http://localhost:1080/
 [USER API GUIDE]: README-API.md
 [Vagrant]: https://www.vagrantup.com/
 [VirtualBox]: https://www.virtualbox.org/
+[/services]: /services
+[Java]: https://java.com
+[Ansible]: https://www.ansible.com
