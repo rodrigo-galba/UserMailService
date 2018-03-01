@@ -15,7 +15,7 @@ This solution applies the architectural concepts of micro services, to provide t
 
 |![Image of architecture](/doc/architecture.jpg)|
 |:--:|
-|*diagram made with draw.io*|
+|*diagram made with https://draw.io*|
 
 The project consists of three micro services:
 
