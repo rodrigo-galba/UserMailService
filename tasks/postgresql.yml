@@ -1,3 +1,4 @@
+# https://www.commandprompt.com/blog/managing_pg_hbaconf_with_ansible/
 ---
 - name: Add Postgres Repo
   become: yes
@@ -27,23 +28,32 @@
     name: postgresql
     state: started
 
+- name: Create user database application
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+
 - name: Create database application
   become: yes
   become_user: postgres
-  shell: psql -c 'create database {{ app_database_name }};'
-  ignore_errors: yes
+  postgresql_db:
+    name: "{{ app_database_name }}"
+    owner: "{{ db_user }}"
 
-- name: Create user application
+- name: Enables password authentication method
   become: yes
-  become_user: postgres
-  shell: psql -c "create user {{ db_user }} with password '{{ root_db_password }}';"
-  ignore_errors: yes
+  replace:
+    dest: /etc/postgresql/9.5/main/pg_hba.conf
+    regexp: "^local\\s*all\\s*all\\s*peer$"
+    replace: "local   all             all            md5"
 
-- name: Grant database permissions
+- name: Reloads Postgres
   become: yes
-  become_user: postgres
-  shell: psql -c 'grant all privileges on database {{ app_database_name }} to {{ db_user }};'
-  ignore_errors: yes
+  service:
+    name: postgresql
+    state: reloaded
 
 ############################################################
 #### Postgresql remote acces for development mode

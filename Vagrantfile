@@ -9,7 +9,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = "ubuntu/xenial64"
   config.vm.synced_folder ".", "/vagrant", type: 'nfs'
-  config.vm.synced_folder ".", "/home/ubuntu/project", type: 'nfs'
 
   config.vm.provider :virtualbox do |vb|
     vb.gui = false

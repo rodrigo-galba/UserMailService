@@ -1,3 +1,9 @@
 ---
+- name: create symlink of project folder
+  file:
+    src: "/vagrant"
+    dest: "{{ project_root }}"
+    state: link
+
 - name: start at Projects folder
   shell: echo 'cd {{ project_root }}' >> ~/.zshrc

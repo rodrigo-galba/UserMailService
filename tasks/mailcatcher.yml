@@ -3,7 +3,7 @@
     become: yes
     shell: gem install mailcatcher --no-ri --no-rdoc
     args:
-      chdir: "{{ user_home_path }}"
+      chdir: "~"
       executable: /bin/zsh
 
   - name: start mailcatcher
