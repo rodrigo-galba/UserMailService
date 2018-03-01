@@ -3,17 +3,27 @@
     become: no
     template:
         src: templates/start_applications.sh
-        dest: "{{ user_home_path }}/start_applications.sh"
+        dest: "~/start_applications.sh"
         owner: "{{ host_user }}"
+
+  - name: Copy script to create users table
+    become: no
+    template:
+        src: templates/seeds/create_users_table.sql
+        dest: "~/create_users_table.sql"
+        owner: "{{ host_user }}"
+
+  - name: Create table users
+    shell: PGPASSWORD={{ db_password }} psql -U {{ db_user }} -d {{ app_database_name }} -a -f ~/create_users_table.sql
+    ignore_errors: yes
 
   - name: Copy script to seed admin user
     become: no
     template:
         src: templates/seeds/insert_admin.sql
-        dest: "{{ user_home_path }}/insert_admin.sql"
+        dest: "~/insert_admin.sql"
         owner: "{{ host_user }}"
 
-  - name: Create database application
-    become: no
-    shell: psql -d {{ app_database_name }} -a -f {{ user_home_path }}/insert_admin.sql
+  - name: Create admin user
+    shell: PGPASSWORD={{ db_password }} psql -U {{ db_user }} -d {{ app_database_name }} -a -f ~/insert_admin.sql
     ignore_errors: yes
