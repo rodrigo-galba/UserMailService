@@ -1,14 +1,10 @@
 ---
   - name: Installing mailcatcher
-    become: no
-    shell: "chdir={{user_home_path}} gem install mailcatcher"
-    environment:
-      PATH: "{{ rvm_path }}"
-      GEM_PATH: "{{ gem_path }}"
+    become: yes
+    shell: gem install mailcatcher --no-ri --no-rdoc
+    args:
+      chdir: "{{ user_home_path }}"
+      executable: /bin/zsh
 
   - name: start mailcatcher
     shell: mailcatcher --ip 0.0.0.0
-    environment:
-      PATH: "{{ rvm_path }}"
-      GEM_PATH: "{{ gem_path }}"
-    ignore_errors: yes
