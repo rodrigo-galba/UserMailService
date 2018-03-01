@@ -38,3 +38,4 @@
     - include: tasks/redis.yml
     - include: tasks/rabbitmq.yml
     - include: tasks/finetune.yml
+    - include: tasks/application.yml

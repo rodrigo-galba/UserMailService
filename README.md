@@ -99,7 +99,7 @@ After provisioning and constructing the projects, they should already be availab
 To use the application, we need a valid user. To create one:
 
 ```sh
-curl --request POST \
+curl -i --request POST \
   --url http://localhost:8080/users/create \
   --header 'content-type: application/json' \
   --data '{
@@ -112,8 +112,8 @@ curl --request POST \
 
 #### Step 2 - Perform login
 You will then need to log in with the credentials informed:
-```json
-curl --request POST \
+```sh
+curl -i --request POST \
   --url http://localhost:8080/login \
   --user johndoe:s3cr3t
 ```
@@ -131,8 +131,8 @@ The token `x-auth-token` will be used to identify the user in the following requ
 
 To send an email, simply send the information according to the request template.
 
-```json
-curl --request POST \
+```sh
+curl -i --request POST \
   --url http://localhost:8080/users/email \
   --header 'content-type: application/json' \
   --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961' \

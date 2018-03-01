@@ -4,7 +4,6 @@
   become: yes
   with_items:
     - openjdk-8-jdk
-    - zip
     - maven
 
 - name: check if sdkman is installed

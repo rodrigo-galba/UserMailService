@@ -1,0 +1,7 @@
+---
+  - name: Copy script to start applications
+    become: no
+    template:
+        src: templates/start_applications.sh
+        dest: "{{ user_home_path }}/start_applications.sh"
+        owner: "{{ host_user }}"

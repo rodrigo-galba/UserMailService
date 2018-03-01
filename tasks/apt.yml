@@ -22,9 +22,7 @@
     - libcurl4-openssl-dev
     - python-software-properties
     - nfs-common
-    - xvfb
-    - libqt4-dev
-    - libqtwebkit-dev
     - tree
     - htop
     - python-pip
+    - zip
