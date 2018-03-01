@@ -1,7 +1,6 @@
 ---
 - hosts: all
   vars:
-    ruby_version: ruby-2.3.4
     db_user: userapp
     db_password: password
     app_database_name: user_app
