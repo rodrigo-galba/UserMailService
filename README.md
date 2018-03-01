@@ -29,7 +29,7 @@ They are available in the [/services] directory.
 
 Clone current repo including all submodules:
 ```
-git clone --recurse-submodules -j3 https://itbucket.org/rgalba/challenge-java-spring-cloud.git
+git clone --recurse-submodules -j3 https://bitbucket.org/rgalba/challenge-java-spring-cloud.git
 ```
 
 ## Technology stack
