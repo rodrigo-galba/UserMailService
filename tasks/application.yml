@@ -5,3 +5,15 @@
         src: templates/start_applications.sh
         dest: "{{ user_home_path }}/start_applications.sh"
         owner: "{{ host_user }}"
+
+  - name: Copy script to seed admin user
+    become: no
+    template:
+        src: templates/seeds/insert_admin.sql
+        dest: "{{ user_home_path }}/insert_admin.sql"
+        owner: "{{ host_user }}"
+
+  - name: Create database application
+    become: no
+    shell: psql -d {{ app_database_name }} -a -f {{ user_home_path }}/insert_admin.sql
+    ignore_errors: yes
