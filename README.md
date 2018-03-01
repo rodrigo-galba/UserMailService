@@ -102,7 +102,9 @@ Access the virtual machine:
 vagrant ssh
 ```
 
-All projects were built using [Maven]. So, just run the `package` command in each directory respectively:
+The project path in the virtual machine is `~/project`.
+
+All projects were built using [Maven]. So, just run the `mvn package` command in each directory respectively:
 
 - configuration server
 ```sh
@@ -128,10 +130,12 @@ java -jar target/userapp-0.0.1-SNAPSHOT.jar &
 
 ## Usage
 
-After provisioning and constructing the projects, they should already be available for use.
+After provisioning and building the projects, they should already be available for use.
+
 There is an admin account with credentials:
+
 > login: `admin`
-> password: `s3cr3t`
+  password: `s3cr3t`
 
 ### Scenario: Sending an email
 #### Step 1 - Create regular user
@@ -176,7 +180,7 @@ curl -i --request POST \
   --header 'content-type: application/json' \
   --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961' \
   --data '{
-	"body": "Admins can see this.",
+	"body": "Message in a bottle. Admins can see this.",
 	"subject": "Hello spring boot.",
 	"recipient": "friend_of_mine@email.com"
 }'
