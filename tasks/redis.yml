@@ -45,7 +45,7 @@
   - name: make sure redis.log file exists
     become: yes
     template:
-        src: templates/redis/redis.log
+        src: templates/redis/redis-log
         dest: /var/log/redis.log
         owner: redis
         group: redis
