@@ -1,6 +1,11 @@
 ---
-  - name: install mailcatcher
-    shell: /home/{{ host_user }}/.rvm/rubies/{{ ruby_version }}/bin/gem install mailcatcher
+  - name: Installing mailcatcher
+    become: no
+    shell: source {{user_home_path}}/.zshrc && gem install mailcatcher
+    # This will read your bash profile file, which would setup sdkman-init.sh.
+    args:
+      chdir: "{{ user_home_path }}"
+      executable: /bin/zsh
 
   - name: start mailcatcher
     shell: mailcatcher --ip 0.0.0.0

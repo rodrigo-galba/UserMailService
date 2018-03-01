@@ -32,7 +32,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define :dev, primary: true do |config|
     config.vm.network :private_network, ip: "192.168.3.5"
-    config.vm.provision :ansible_local, playbook: "playbook.yml", verbose: true
+    config.vm.provision :ansible_local do |resume|
+      resume.playbook = "playbook.yml"
+      resume.verbose = false
+      # resume.limit = "@/vagrant/playbook.retry"
+    end
   end
 
 end

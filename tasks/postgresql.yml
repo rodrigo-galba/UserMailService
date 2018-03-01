@@ -1,16 +1,19 @@
 ---
 - name: Add Postgres Repo
   become: yes
-  apt_repository: repo='deb https://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' state=present
+  apt_repository:
+    repo: 'deb https://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
+    state: present
 
 - name: add postgres trusted key
   become: yes
-  apt_key: url=https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc state=present
+  apt_key:
+    url: https://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc
+    state: present
 
 - name: Install Postgresql 9.5
-  apt: pkg={{ item }} state=latest
+  apt: pkg={{ item }} allow_unauthenticated=yes
   become: yes
-  force: yes
   with_items:
     - postgresql-common
     - postgresql-9.5
