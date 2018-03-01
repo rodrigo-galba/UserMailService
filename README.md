@@ -81,6 +81,18 @@ vagrant up
 
 With this, all the services necessary for the operation of the application will be installed and configured.
 
+Useful commands:
+
+> Starts mailcatcher (to handle email):
+```
+mailcatcher --ip 0.0.0.0
+```
+
+> Starts postgresql:
+```
+sudo service postgresql start
+```
+
 ---
 
 ## Building projects for the first time
