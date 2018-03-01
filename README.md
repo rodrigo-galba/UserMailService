@@ -102,7 +102,7 @@ Access the virtual machine:
 vagrant ssh
 ```
 
-All projects was built using [Maven]. So, just run the `package` command in each directory respectively:
+All projects were built using [Maven]. So, just run the `package` command in each directory respectively:
 
 - configuration server
 ```sh
