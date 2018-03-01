@@ -13,7 +13,9 @@ This solution applies the architectural concepts of micro services, to provide t
 
 ## Architecture
 
-![Image of architecture](/doc/architecture.jpg)
+|![Image of architecture](/doc/architecture.jpg)|
+|:--:|
+|*diagram made with draw.io*|
 
 The project consists of three micro services:
 
@@ -143,7 +145,7 @@ curl -i --request POST \
 }'
 ```
 
-To check the email box, access http://localhost:1080/:
+To check the email box, access http://localhost:1080/
 
 ---
 
