@@ -19,7 +19,7 @@ curl --url http://localhost:8080/users/ \
   --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961'
 ```
 
-- Updates user details by ID:
+- Update user details by ID:
 
 Example:
 > user_id: 19
@@ -35,7 +35,7 @@ curl --request PATCH \
 }'
 ```
 
-- Deletes user by ID
+- Delete user by ID
 Example:
 > user_id: 19
 ```sh
@@ -52,14 +52,14 @@ curl --url http://localhost:8080/users/19 \
   --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961'
 ```
 
-- Performs login
+- Perform login
 ```sh
 curl --request POST \
   --url http://localhost:8080/login \
   --user johndoe:s3cr3t
 ```
 
-- Performs logout
+- Perform logout
 ```sh
 curl --request POST \
   --url http://localhost:8080/logout \
@@ -67,7 +67,7 @@ curl --request POST \
   --header 'x-auth-token: 178b4005-b72b-49b3-8ad2-28a0353ab74b'
 ```
 
-- Sends an email
+- Send email
 
 ```sh
 curl --request POST \
