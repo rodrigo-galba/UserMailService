@@ -1,8 +1,8 @@
 # Challenge Java-Spring boot
 
-Cloud soluction using [Spring boot].
+Cloud solution using [Spring boot].
 
-This solution applies the architectural concepts of micro-services, to provide the following features:
+This solution applies the architectural concepts of micro services, to provide the following features:
 
 - User management (regular and admin users).
 - Asynchronous email sending.
@@ -15,137 +15,127 @@ This solution applies the architectural concepts of micro-services, to provide t
 
 ![Image of architecture](/doc/architecture.jpg)
 
-The project consists of three micro-services:
+The project consists of three micro services:
 
-- User Service
+- User Service (this repository)
 - [Mail Service]
 - [Configuration Service]
 
-All projects are based on Spring Boot and have different repositories.
+All projects are based on Spring Boot. Since projects have distinct lifecycles, they must have different repositories. But for the sake of simplicity, the other projects were added as modules to the main repository.
 
-## User service
+They are available in the `services` directory.
+
+#### User service
 
 It is basically an API for user control, with authentication and authorization handling, as well as providing email sending and password + permission change (for admins).
 
-## Mail Service
+For more details and documentation, go to [USER API GUIDE].
 
-## Configuration Service
+#### Mail Service
+
+It is a micro service that consumes template messages and transforms into e-mail messages.
+
+#### Configuration Service
+
+It is a micro service that manages configurations of several clients, based on a main GIT repository. In addition it performs the control by environment profile, as well as access control.
 
 ---
 
 ## Provisioning
 
+Infrastructure provisioning has been implemented with Ansible and Vagrant in instances based on VirtualBox.
+
+Install both:
+
+- [Vagrant] 2+
+- [VirtualBox] 5+
+
+To perform provisioning, access the project directory and run:
+```sh
+cd PROJECT_ROOT
+vagrant up
+```
+
+With this, all the services necessary for the operation of the application will be installed and configured.
+
 ---
+
+## Building projects for the first time
+
+Access the virtual machine:
+```
+vagrant ssh
+```
+
+All projects are built with [Maven]. So, just run the `package` command in each directory respectively:
+
+- configuration server
+```sh
+cd ~/project/services/config-server
+mvn package
+java -jar target/configuration-service-0.0.1-SNAPSHOT.jar &
+```
+
+- mail-service
+```sh
+cd ~/project/services/mail-service
+mvn package
+java -jar target/mailapp-0.0.1-SNAPSHOT.jar &
+```
+
+- userapp
+```sh
+cd ~/project/
+mvn package -Dmaven.test.skip=true
+java -jar target/userapp-0.0.1-SNAPSHOT.jar &
+```
 
 ## Usage
-To build project using [Maven], just run:
+
+After provisioning and constructing the projects, they should already be available for use.
+
+### Scenario: Sending an email
+#### Step 1 - Create regular user
+To use the application, we need a valid user. To create one:
 
 ```sh
-mvn package
-```
-
-To run main application:
-```sh
-mvn spring-boot:run
-```
-
-To test web-api:
-```sh
-curl http://localhost:8080/
-```
-
-expected response:
-> Hello World!
-
-To run using a fully `executable-jar`:
-```
-java -jar target/poc-springboot-0.0.1-SNAPSHOT.jar
-```
-
-To gracefully shutdown application:
-```
-ctrl+c
-```
-
-To perform tests:
-```
-mvn test
-```
-
----
-
-## User API
-
-- Creates a user (login not required)
-```json
 curl --request POST \
   --url http://localhost:8080/users/create \
   --header 'content-type: application/json' \
   --data '{
-	"name": "Jane Doe",
-	"login": "janedoe",
-	"email": "janedoe@email.com",
-	"password": "ultra-secret"
+	"name": "John Doe",
+	"login": "johndoe",
+	"email": "johndoe@email.com",
+	"password": "s3cr3t"
 }'
 ```
 
-- Get all users
-```json
-curl --url http://localhost:8080/users/
-```
-
-- Updates user details by ID:
-
-Example:
-> user_id: 19
-```json
-curl --request PATCH \
-  --url http://localhost:8080/users/19 \
-  --header 'content-type: application/json' \
-  --data '{
-		"name": "User 19",
-		"login": "user19",
-	  "email": "user19@email.com"
-}'
-```
-
-- Deletes user by ID
-Example:
-> user_id: 19
-```json
-curl --request DELETE \
-  --url http://localhost:8080/users/19
-```
-
-- Find user by ID
-Example:
-> user_id: 19
-```json
-curl --url http://localhost:8080/users/19
-```
-
-- Performs login
+#### Step 2 - Perform login
+You will then need to log in with the credentials informed:
 ```json
 curl --request POST \
   --url http://localhost:8080/login \
-  --header 'authorization: Basic amFuZWRvZTp1bHRyYS1zZWNyZXQ='
+  --user johndoe:s3cr3t
 ```
+response information:
 
-- Performs logout
-```json
-curl --request POST \
-  --url http://localhost:8080/logout \
-  --header 'content-type: application/json' \
-  --header 'x-auth-token: 178b4005-b72b-49b3-8ad2-28a0353ab74b'
-```
+> X-Content-Type-Options: nosniff
+X-Application-Context: challenge-java-spring:development
+`x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961`
+Content-Length: 0
+Date: Thu, 01 Mar 2018 03:21:28 GMT
 
-- Sends an email
+The token `x-auth-token` will be used to identify the user in the following requests.
+
+#### Step 3 - Send and email
+
+To send an email, simply send the information according to the request template.
 
 ```json
 curl --request POST \
   --url http://localhost:8080/users/email \
   --header 'content-type: application/json' \
-  --header 'x-auth-token: 2a9dadd7-65b2-4a3c-afaf-05e55174207e' \
+  --header 'x-auth-token: 6626745c-e482-4d2f-8551-7aa8483e3961' \
   --data '{
 	"body": "Admins can see this.",
 	"subject": "Hello spring boot.",
@@ -153,35 +143,12 @@ curl --request POST \
 }'
 ```
 
-- Change user password (only by admins)
-__If the user updates himself, his session will be terminated.__
-```json
-curl --request PATCH \
-  --url http://localhost:8080/admin/password/ \
-  --header 'content-type: application/json' \
-  --header 'x-auth-token: 178b4005-b72b-49b3-8ad2-28a0353ab74b' \
-  --data '{
-    "id": "33",
-    "password": "new-password"
-}'
-```
-
-- Change user permission (only by admins)
-__If the user updates himself, his session will be terminated.__
-```json
-curl --request PATCH \
- --url http://localhost:8080/admin/permission/ \
- --header 'content-type: application/json' \
- --header 'x-auth-token: ae0c3d37-0d92-45e7-aa38-d04b12cf4cd7' \
- --data '{
-   "userId": 33,
-   "admin": true
-}'
-```
+To check the email box, access http://localhost:1080/:
 
 ---
 
 ## TODO List
+- [ ] Automate build projects during provisioning
 - [ ] Improve code coverage
 - [ ] Centralized logging
 - [ ] Docker for dependencies
@@ -192,3 +159,6 @@ curl --request PATCH \
 [Maven]: https://maven.apache.org/
 [Mail Service]: https://bitbucket.org/rgalba/mailapp
 [Configuration Service]: https://bitbucket.org/rgalba/java-spring-config-server
+[USER API GUIDE]: README-API.md
+[Vagrant]: https://www.vagrantup.com/
+[VirtualBox]: https://www.virtualbox.org/
