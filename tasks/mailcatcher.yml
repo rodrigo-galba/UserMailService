@@ -8,3 +8,4 @@
 
   - name: start mailcatcher
     shell: mailcatcher --ip 0.0.0.0
+    ignore_errors: yes
