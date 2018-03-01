@@ -93,6 +93,7 @@ cd ~/project/services/config-server
 mvn package
 java -jar target/configuration-service-0.0.1-SNAPSHOT.jar &
 ```
+> To see configuration service in action: http://localhost:8888/challenge-java-spring/development
 
 - mail-service
 ```sh
