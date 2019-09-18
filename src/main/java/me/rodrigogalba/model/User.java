@@ -2,7 +2,6 @@ package me.rodrigogalba.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import me.rodrigogalba.model.listener.UserEntityListener;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
