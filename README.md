@@ -19,7 +19,7 @@ This solution applies the architectural concepts of micro services, to provide t
 |:--:|
 |*diagram made with https://draw.io*|
 
-The project consists of three micro services:
+The project consists of three microservices:
 
 - User Service (this repository)
 - [Mail Service]
@@ -31,13 +31,13 @@ They are available in the [/services] directory.
 
 Clone current repo including all submodules:
 ```
-git clone --recurse-submodules -j3 https://bitbucket.org/rgalba/challenge-java-spring-cloud.git
+git clone --recurse-submodules -j3 https://github.com/rgalba/challenge-java-spring-cloud.git
 ```
 
 ## Technology stack
 Main tools used in this project:
 
-- [Java] 8: General-purpose computer-programming language.
+- [Java] 11: General-purpose computer-programming language.
 - [Spring Boot]: Makes it easy to create stand-alone, production-grade Spring based Applications.
 - [Maven]: Project management and comprehension tool.
 - [Ansible]: Automation for everyone.
