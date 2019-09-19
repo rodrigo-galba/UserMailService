@@ -1,4 +1,4 @@
-# Challenge Java-Spring boot
+# User App service
 
 Cloud solution using [Spring boot].
 
@@ -200,8 +200,8 @@ To check the email box, access http://localhost:1080/
 
 [Spring boot]: https://projects.spring.io/spring-boot/
 [Maven]: https://maven.apache.org/
-[Mail Service]: https://bitbucket.org/rgalba/mailapp
-[Configuration Service]: https://bitbucket.org/rgalba/java-spring-config-server
+[Mail Service]: https://github.com/rgalba/mailapp
+[Configuration Service]: https://github.com/rgalba/java-spring-config-server
 [USER API GUIDE]: README-API.md
 [Vagrant]: https://www.vagrantup.com/
 [VirtualBox]: https://www.virtualbox.org/
