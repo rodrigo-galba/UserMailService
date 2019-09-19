@@ -1,3 +1,5 @@
+<a href="https://codeclimate.com/github/rgalba/UserMailService/maintainability"><img src="https://api.codeclimate.com/v1/badges/c9f6d50a26663fbb7fb4/maintainability" /></a>
+
 # User App service
 
 Cloud solution using [Spring boot].
