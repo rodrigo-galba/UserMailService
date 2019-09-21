@@ -1,23 +1,24 @@
 package me.rodrigogalba.repository;
 
+import me.rodrigogalba.Application;
 import me.rodrigogalba.model.User;
-import org.hamcrest.core.StringContains;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.validation.ConstraintViolationException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest
+@SpringBootTest(classes= Application.class)
 public class UserRepositoryTest {
 
     @Autowired
-    UserRepository repository;
+    private UserRepository userRepository;
 
     @Test
     public void createValidUser() {
@@ -26,13 +27,13 @@ public class UserRepositoryTest {
         user.setLogin("user_login");
         user.setEmail("user@email.com");
         user.setPassword("plain_password");
-        repository.save(user);
+        userRepository.save(user);
 
         assertNotNull(user.getId());
         assertEquals("Username", user.getName());
         assertEquals("user_login", user.getLogin());
         assertEquals("user@email.com", user.getEmail());
-        assertEquals("plain_password", user.getEncryptedPassword());
+        assertNotNull(user.getEncryptedPassword());
         assertFalse(user.isAdmin());
         assertNotNull(user.getCreatedDate());
         assertNotNull(user.getUpdatedDate());
@@ -45,10 +46,11 @@ public class UserRepositoryTest {
             user.setLogin("user_login");
             user.setEmail("user@email.com");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates null name");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Não pode estar em branco"));
         }
     }
 
@@ -60,10 +62,11 @@ public class UserRepositoryTest {
             user.setLogin("user_login");
             user.setEmail("user@email.com");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates empty name");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Não pode estar em branco"));
         }
     }
 
@@ -74,10 +77,11 @@ public class UserRepositoryTest {
             user.setName("Username");
             user.setEmail("user@email.com");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates null login");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Não pode estar em branco"));
         }
     }
 
@@ -89,10 +93,11 @@ public class UserRepositoryTest {
             user.setLogin("");
             user.setEmail("user@email.com");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates empty login");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Tamanho deve estar entre 3 e 2147483647"));
         }
     }
 
@@ -103,10 +108,11 @@ public class UserRepositoryTest {
             user.setName("Username");
             user.setLogin("user_login");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates null email");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Não pode estar em branco"));
         }
     }
 
@@ -118,11 +124,16 @@ public class UserRepositoryTest {
             user.setLogin("user_login");
             user.setEmail("");
             user.setPassword("plain_password");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates empty email");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("Não pode estar em branco"));
+            String message = extractErrorMessage(ex);
+            assertThat(message, containsString("Não pode estar em branco"));
         }
+    }
+
+    private String extractErrorMessage(Exception ex) {
+        return ((ConstraintViolationException) ex).getConstraintViolations().stream().findFirst().get().getMessage();
     }
 
     @Test
@@ -132,10 +143,11 @@ public class UserRepositoryTest {
             user.setName("Username");
             user.setLogin("user_login");
             user.setEmail("user@email.com");
-            repository.save(user);
+            userRepository.save(user);
             fail("should validates null password");
         } catch (Exception ex) {
-            assertThat(ex.getLocalizedMessage(), containsString("could not execute statement"));
+            String message = ex.getMessage();
+            assertThat(message, containsString("Senha deve ser informada."));
         }
     }
 }
