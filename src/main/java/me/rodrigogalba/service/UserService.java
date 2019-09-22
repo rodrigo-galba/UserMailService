@@ -24,6 +24,8 @@ public class UserService {
     public User authenticate(String login, String encryptedPassword) {
         User user = repository.findByLogin(login);
 
+        if (user == null) return null;
+
         if (encryptedPassword.matches(user.getEncryptedPassword())) {
             return user;
         } else {
