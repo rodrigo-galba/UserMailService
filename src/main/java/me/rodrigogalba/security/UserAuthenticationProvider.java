@@ -1,9 +1,10 @@
 package me.rodrigogalba.security;
 
+import lombok.RequiredArgsConstructor;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,13 +18,11 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 @Component
+@RequiredArgsConstructor
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    private UserService service;
-
-    @Autowired
-    private UserRepository repository;
+    private final UserService service;
+    private final UserRepository repository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -45,6 +44,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
 
+    @Bean
     public UserDetailsService getUserDetailsService() {
         return new UserDetailsService() {
             @Override
