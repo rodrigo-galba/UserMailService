@@ -4,8 +4,8 @@
 
 plugins {
     id 'java'
-    id 'maven-publish'
     id "org.springframework.boot" version "1.5.10.RELEASE"
+    id "com.palantir.docker" version "0.22.1"
 }
 
 repositories {
@@ -40,14 +40,10 @@ version = '0.0.1-SNAPSHOT'
 description = 'userapp'
 sourceCompatibility = '11'
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
+}
+
+docker {
+    name 'me.rogal/user-app'
 }
