@@ -1,32 +1,24 @@
 package me.rodrigogalba.controller;
 
+import lombok.RequiredArgsConstructor;
 import me.rodrigogalba.messaging.UserMailMessage;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
-import me.rodrigogalba.service.UserMailService;
 import me.rodrigogalba.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserRepository repository;
-
-    @Autowired
-    UserService userService;
+    private final UserRepository repository;
+    private final UserService userService;
 
     @GetMapping("/")
     public List<User> index() {

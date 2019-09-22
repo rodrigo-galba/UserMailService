@@ -1,6 +1,6 @@
 package me.rodrigogalba.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +21,10 @@ import org.springframework.session.web.http.HttpSessionStrategy;
 @EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    UserAuthenticationProvider authProvider;
+    private final UserAuthenticationProvider authProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder builder) throws Exception {
