@@ -1,10 +1,10 @@
 package me.rodrigogalba.service;
 
+import lombok.RequiredArgsConstructor;
 import me.rodrigogalba.messaging.UserMailMessage;
 import me.rodrigogalba.model.User;
 import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.security.Roles;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
@@ -14,14 +14,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository repository;
-
-    @Autowired
-    UserMailService mailService;
+    private final UserRepository repository;
+    private final UserMailService mailService;
 
     public User authenticate(String login, String encryptedPassword) {
         User user = repository.findByLogin(login);

@@ -1,17 +1,18 @@
 package me.rodrigogalba.controller;
 
+import lombok.RequiredArgsConstructor;
 import me.rodrigogalba.controller.template.AdminPermission;
 import me.rodrigogalba.model.User;
-import me.rodrigogalba.repository.UserRepository;
 import me.rodrigogalba.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -19,10 +20,10 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
 
     @PatchMapping(value = "/password/")
     public ResponseEntity<User> changePassword(@RequestBody User userDetails,
